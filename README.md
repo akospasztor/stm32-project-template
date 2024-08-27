@@ -15,6 +15,8 @@ onboard ST-Link debugger on the STM32L496 Discovery board used in this project
 was converted to a J-Link debugger
 [with this tool](https://www.segger.com/products/debug-probes/j-link/models/other-j-links/st-link-on-board/).
 
+[https://akospasztor.github.io/stm32-project-template/](https://akospasztor.github.io/stm32-project-template/)
+
 [![CI Pipeline](https://github.com/akospasztor/stm32-project-template/actions/workflows/ci-pipeline.yml/badge.svg)](https://github.com/akospasztor/stm32-project-template/actions/workflows/ci-pipeline.yml)
 
 ## Contents
