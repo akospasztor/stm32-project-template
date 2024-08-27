@@ -1,0 +1,61 @@
+{
+    "env": {
+        "commonIncludePath": [
+            "${workspaceFolder}/lib/CMSIS/Device/ST/STM32L4xx/Include",
+            "${workspaceFolder}/lib/CMSIS/Include",
+            "${workspaceFolder}/lib/STM32L4xx_HAL_Driver/Inc",
+            "${workspaceFolder}/lib/STM32L4xx_HAL_Driver/Inc/Legacy",
+            "${workspaceFolder}/mcal/st-stm32l4/include",
+            "${workspaceFolder}/include",
+            "${workspaceFolder}/**"
+        ],
+        "commonDefines": [
+            "STM32L496xx",
+            "USE_HAL_DRIVER",
+            "USE_FULL_ASSERT"
+        ]
+    },
+    "configurations": [
+        {
+            "name": "stm32l496-gcc-windows",
+            "includePath": [
+                "${commonIncludePath}"
+            ],
+            "defines": [
+                "${commonDefines}"
+            ],
+            "compilerPath": "C:/gcc/10-2020-q4/bin/arm-none-eabi-g++.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "gcc-arm"
+        },
+        {
+            "name": "stm32l496-gcc-macos",
+            "includePath": [
+                "${commonIncludePath}"
+            ],
+            "defines": [
+                "${commonDefines}"
+            ],
+            "compilerPath": "/opt/gcc/10-2020-q4/bin/arm-none-eabi-g++",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "gcc-arm"
+        },
+        {
+            "name": "stm32l496-gcc-linux",
+            "includePath": [
+                "${commonIncludePath}"
+            ],
+            "defines": [
+                "${commonDefines}"
+            ],
+            "compilerPath": "/opt/gcc/10-2020-q4/bin/arm-none-eabi-g++",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "gcc-arm"
+        }
+    ],
+    "version": 4,
+    "enableConfigurationSquiggles": true
+}
