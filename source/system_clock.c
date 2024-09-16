@@ -4,7 +4,7 @@
  *******************************************************************************
  * @file
  * @author    Akos Pasztor
- * @brief     This file contains the LED driver implementation.
+ * @brief     This file contains the system clock driver implementation.
  *******************************************************************************
  * @copyright (c) 2024 Akos Pasztor. https://akospasztor.com
  *            This software is licensed under terms that can be found in the
