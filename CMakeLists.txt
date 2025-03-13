@@ -36,7 +36,7 @@ set(DEFINES
     STM32L496xx
     USE_HAL_DRIVER
     USE_FULL_ASSERT
-    $<$<CONFIG:Debug>:DEBUG>
+    $<IF:$<CONFIG:Debug>,DEBUG,NDEBUG>
 )
 
 # Set include paths

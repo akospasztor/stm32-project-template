@@ -15,14 +15,12 @@ set(DEBUG_FLAGS
 # Set release flags (Release build type)
 set(RELEASE_FLAGS
     "-O3"
-    "-DNDEBUG"
 )
 
 # Set flags for release with optimization for minimum size
 # (MinSizeRel build type)
 set(MINSIZEREL_FLAGS
     "-Os"
-    "-DNDEBUG"
 )
 
 # Set flags for release with debug info but no debug (output) code or asserts
@@ -30,7 +28,6 @@ set(MINSIZEREL_FLAGS
 set(RELWITHDEBINFO_FLAGS
     "-O2"
     "-g"
-    "-DNDEBUG"
 )
 
 # Set microcontroller-specific compiler flags
