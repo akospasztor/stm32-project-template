@@ -8,7 +8,7 @@ on:  # yamllint disable-line rule:truthy
 jobs:
   check_format:
     runs-on: ubuntu-latest
-    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.2.0
+    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.3.0
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,7 +18,7 @@ jobs:
           && cmake --build --preset Debug --target check-format
   check_style:
     runs-on: ubuntu-latest
-    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.2.0
+    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.3.0
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
         run: yamllint --strict .
   build_doxygen:
     runs-on: ubuntu-latest
-    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.2.0
+    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.3.0
     needs:
       - check_format
       - check_style
@@ -50,7 +50,7 @@ jobs:
           path: build/doxygen/html
   build_firmware:
     runs-on: ubuntu-latest
-    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.2.0
+    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.3.0
     needs:
       - check_format
       - check_style
@@ -75,7 +75,7 @@ jobs:
             build/${{ matrix.cmake_preset }}/*.map
   run_clang_tidy:
     runs-on: ubuntu-latest
-    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.2.0
+    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.3.0
     needs:
       - check_format
       - check_style
