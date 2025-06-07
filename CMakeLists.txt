@@ -26,6 +26,7 @@ include(cmake/tools/clang-tools.cmake)
 include(cmake/tools/python.cmake)
 
 # Include the microcontroller-specific parameters
+include(cmake/microcontrollers/common.cmake)
 include(cmake/microcontrollers/stm32l4-gcc.cmake)
 
 # Add library files
