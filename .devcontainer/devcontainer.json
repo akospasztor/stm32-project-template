@@ -1,6 +1,6 @@
 {
 	"name": "docker-gcc-arm:10-2020-q4-linux",
-	"image": "docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.2.0",
+	"image": "docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.3.0",
 	"workspaceFolder": "${localWorkspaceFolder}",
 	"workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
 	"runArgs": [
