@@ -119,7 +119,7 @@ void LogPrint(const char* format, ...)
     va_list arg;            // cppcheck-suppress [misra-c2012-17.1]
     va_start(arg, format);  // cppcheck-suppress [misra-c2012-17.1]
 
-    int32_t length =
+    const int32_t length =
         // NOLINTNEXTLINE(clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling)
         vsnprintf((char*)logBuffer, LOG_BUFFER_SIZE,
                   format,  // NOLINT(clang-diagnostic-format-nonliteral)

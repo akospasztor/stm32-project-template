@@ -5,6 +5,7 @@ Checks: >
   readability-*,
   -readability-avoid-const-params-in-decls,
   -readability-magic-numbers,
+  -clang-diagnostic-declaration-after-statement,
   -clang-diagnostic-documentation,
   -clang-diagnostic-missing-noreturn,
   -clang-diagnostic-padded,
