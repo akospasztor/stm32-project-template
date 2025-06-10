@@ -86,12 +86,29 @@ jobs:
         run: >
           cmake --preset Debug
           && cmake --build --preset Debug --target tidy
+  run_cppcheck:
+    runs-on: ubuntu-latest
+    container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.3.0
+    needs:
+      - check_format
+      - check_style
+    strategy:
+      matrix:
+        cmake_preset: ["Debug", "Release", "MinSizeRel", "RelWithDebInfo"]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Configure cmake preset
+        run: cmake --preset ${{ matrix.cmake_preset }}
+      - name: Run cppcheck
+        run: cmake --build --preset ${{ matrix.cmake_preset }} --target cppcheck
   collect_artifacts:
     runs-on: ubuntu-latest
     needs:
       - build_doxygen
       - build_firmware
       - run_clang_tidy
+      - run_cppcheck
     steps:
       - name: Download doxygen html artifacts
         uses: actions/download-artifact@v4
