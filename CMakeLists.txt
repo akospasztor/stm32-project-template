@@ -21,6 +21,10 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message(NOTICE "Build type: ${CMAKE_BUILD_TYPE}")
 
+# Get the number of processors available
+include(ProcessorCount)
+ProcessorCount(NPROC)
+
 # Include the required build tools
 include(cmake/tools/clang-tools.cmake)
 include(cmake/tools/python.cmake)
@@ -125,13 +129,6 @@ add_custom_target(run-format
     COMMENT "Run source code formatting..."
 )
 
-# Add custom target to generate doxygen documentation
-add_custom_target(doxygen
-    COMMAND doxygen docs/doxygen/Doxyfile
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    COMMENT "Generate doxygen documentation..."
-)
-
 # Add custom target to run clang-tidy
 set(CLANG_TIDY_DEFINES
     ${DEFINES}
@@ -152,6 +149,42 @@ add_custom_target(tidy
             ${CLANG_TIDY_INCLUDES}
             ${CLANG_TIDY_SYSTEM_INCLUDES}
     COMMENT "Run clang-tidy..."
+)
+
+# Create directories for cppcheck because they are not created automatically
+set(CPPCHECK_BUILD_DIR ${CMAKE_BINARY_DIR}/cppcheck)
+set(CPPCHECK_REPORT_DIR ${CMAKE_BINARY_DIR}/cppcheck/report)
+file(MAKE_DIRECTORY ${CPPCHECK_BUILD_DIR})
+file(MAKE_DIRECTORY ${CPPCHECK_REPORT_DIR})
+
+# Add custom target to run cppcheck
+add_custom_target(cppcheck
+    COMMAND cppcheck
+            --project=${CMAKE_BINARY_DIR}/compile_commands.json
+            --cppcheck-build-dir=${CPPCHECK_BUILD_DIR}
+            --checkers-report=${CPPCHECK_REPORT_DIR}/checkers.txt
+            --addon=${PROJECT_SOURCE_DIR}/lint/misra.json
+            --check-level=exhaustive
+            --enable=all
+            --error-exitcode=1
+            --inconclusive
+            --inline-suppr
+            --max-ctu-depth=10
+            --safety
+            --std=c11
+            --suppressions-list=${PROJECT_SOURCE_DIR}/lint/suppressions.txt
+            -D__GNUC__
+            -j${NPROC}
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMENT "Running cppcheck..."
+)
+
+
+# Add custom target to generate doxygen documentation
+add_custom_target(doxygen
+    COMMAND doxygen docs/doxygen/Doxyfile
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMENT "Generate doxygen documentation..."
 )
 
 # Specify additional clean files

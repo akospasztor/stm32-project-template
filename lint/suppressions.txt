@@ -1,0 +1,76 @@
+// Cppcheck cannot find the standard include header files automatically.
+// This check is suppressed globally.
+missingIncludeSystem
+
+// Ignore checks in third party libraries
+*:*lib/*
+
+// Message:     The function 'X' is never used [unusedFunction]
+// MISRA:       Functions and objects should not be defined with external
+//              linkage if they are referenced in only one translation unit
+//              [misra-c2012-8.7]
+// Reason:      These functions are part of the microcontroller abstraction
+//              library where not all functions are necessarily used.
+// Risk:        None.
+// Prevention:  None.
+unusedFunction:*mcal/*
+misra-c2012-8.7:*mcal/*
+
+// Message:     A project should not contain unused macro definitions
+//              [misra-c2012-2.5]
+// Reason:      This header file contains defines required by the
+//              microcontroller vendor library (HAL). These defines enable or
+//              disable the microcontroller peripherals; and/or contain values
+//              that are referenced from the vendor library.
+// Risk:        If a macro is declared but not used, then it is unclear to a
+//              reviewer if the macro is redundant or it has been left unused by
+//              mistake.
+// Prevention:  Code reviews.
+misra-c2012-2.5:*include/stm32l4xx_hal_conf.h
+misra-c2012-2.5:*source/system_stm32l4xx.c
+
+// Message:     The function 'X' is never used [unusedFunction]
+// MISRA:       A compatible declaration shall be visible when an object
+//              or function with external linkage is defined [misra-c2012-8.4]
+// Reason:      These functions are interrupt handlers and they are declared in
+//              the startup file.
+// Risk:        None.
+// Prevention:  None.
+unusedFunction:*source/stm32l4xx_it.c
+misra-c2012-8.4:*source/stm32l4xx_it.c
+
+// Message:     Functions and objects should not be defined with external
+//              linkage if they are referenced in only one translation unit
+//              [misra-c2012-8.7]
+// Reason:      These functions are part of the standard implementation of the
+//              microcontroller vendor library.
+// Risk:        None.
+// Prevention:  None.
+misra-c2012-8.7:*source/system_stm32l4xx.c
+
+// Message:     A conversion should not be performed between a pointer to object
+//              and an integer type [misra-c2012-11.4]
+// Reason:      The low-level macros provided within the microcontroller vendor
+//              library (HAL) contain conversions that are addressing memory
+//              mapped registers and hardware specific features. Currently
+//              cppcheck does not support suppressing those in the vendor
+//              library. This file is part of the microcontroller abstraction
+//              layer (MCAL) and it relies heavily on those macros. Therefore,
+//              these messages are suppressed in this file.
+// Risk:        Conversion of a pointer to object into an integer may produce a
+//              value that cannot be represented in the chosen integer type
+//              resulting in undefined behavior.
+// Prevention:  Code reviews.
+misra-c2012-11.4:*mcal/st-stm32l4/source/rcc.c
+misra-c2012-11.4:*source/system_stm32l4xx.c
+
+// Message:     The Standard Library input/output functions shall not be
+//              used [misra-c2012-21.6]
+// Reason:      Definitions and functions are required from the stdio.h file.
+//              The used standard library files are part of the compiler
+//              toolchain, thus minimizing the unspecified, undefined and
+//              implementation-defined behaviors.
+// Risk:        Streams and file I/O have unspecified, undefined and
+//              implementation-defined behaviors associated with them.
+// Prevention:  Code reviews and testing.
+misra-c2012-21.6:*source/*
