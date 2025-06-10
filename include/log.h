@@ -25,7 +25,6 @@ extern "C" {
 
 /* Functions------------------------------------------------------------------*/
 void LogInit(void);
-void LogDeinit(void);
 void LogPrint(const char* format, ...);
 
 #ifdef __cplusplus

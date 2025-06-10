@@ -27,9 +27,6 @@ extern "C" {
 void LedInitLd2(void);
 void LedInitLd3(void);
 
-void LedDeinitLd2(void);
-void LedDeinitLd3(void);
-
 void LedLd2On(void);
 void LedLd2Off(void);
 
