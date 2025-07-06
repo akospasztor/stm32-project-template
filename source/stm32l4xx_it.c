@@ -13,8 +13,6 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32l4xx_it.h"
-
 #include "error_handler.h"
 #include "stm32l4xx_hal.h"
 
@@ -25,7 +23,7 @@
 /**
  * @brief  This function handles the non-maskable interrupts.
  */
-// NOLINTNEXTLINE(readability-identifier-naming)
+// NOLINTNEXTLINE(readability-identifier-naming,clang-diagnostic-missing-prototypes)
 void NMI_Handler(void)
 {
     ErrorHandler();
@@ -34,7 +32,7 @@ void NMI_Handler(void)
 /**
  * @brief  This function handles the hard-fault interrupts.
  */
-// NOLINTNEXTLINE(readability-identifier-naming)
+// NOLINTNEXTLINE(readability-identifier-naming,clang-diagnostic-missing-prototypes)
 void HardFault_Handler(void)
 {
     ErrorHandler();
@@ -43,7 +41,7 @@ void HardFault_Handler(void)
 /**
  * @brief  This function handles the memory management faults.
  */
-// NOLINTNEXTLINE(readability-identifier-naming)
+// NOLINTNEXTLINE(readability-identifier-naming,clang-diagnostic-missing-prototypes)
 void MemManage_Handler(void)
 {
     ErrorHandler();
@@ -52,7 +50,7 @@ void MemManage_Handler(void)
 /**
  * @brief  This function handles the prefetch faults and memory access faults.
  */
-// NOLINTNEXTLINE(readability-identifier-naming)
+// NOLINTNEXTLINE(readability-identifier-naming,clang-diagnostic-missing-prototypes)
 void BusFault_Handler(void)
 {
     ErrorHandler();
@@ -61,7 +59,7 @@ void BusFault_Handler(void)
 /**
  * @brief  This function handles the undefined instruction and illegal states.
  */
-// NOLINTNEXTLINE(readability-identifier-naming)
+// NOLINTNEXTLINE(readability-identifier-naming,clang-diagnostic-missing-prototypes)
 void UsageFault_Handler(void)
 {
     ErrorHandler();
@@ -70,7 +68,7 @@ void UsageFault_Handler(void)
 /**
  * @brief  This function handles the system service calls via SWI instruction.
  */
-// NOLINTNEXTLINE(readability-identifier-naming)
+// NOLINTNEXTLINE(readability-identifier-naming,clang-diagnostic-missing-prototypes)
 void SVC_Handler(void)
 {
 }
@@ -78,7 +76,7 @@ void SVC_Handler(void)
 /**
  * @brief  This function handles the debug monitor interrupts.
  */
-// NOLINTNEXTLINE(readability-identifier-naming)
+// NOLINTNEXTLINE(readability-identifier-naming,clang-diagnostic-missing-prototypes)
 void DebugMon_Handler(void)
 {
 }
@@ -86,7 +84,7 @@ void DebugMon_Handler(void)
 /**
  * @brief  This function handles the pendable requests for system service.
  */
-// NOLINTNEXTLINE(readability-identifier-naming)
+// NOLINTNEXTLINE(readability-identifier-naming,clang-diagnostic-missing-prototypes)
 void PendSV_Handler(void)
 {
 }
@@ -94,7 +92,7 @@ void PendSV_Handler(void)
 /**
  * @brief  This function handles system tick timer interrupts.
  */
-// NOLINTNEXTLINE(readability-identifier-naming)
+// NOLINTNEXTLINE(readability-identifier-naming,clang-diagnostic-missing-prototypes)
 void SysTick_Handler(void)
 {
     HAL_IncTick();

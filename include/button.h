@@ -26,7 +26,6 @@ extern "C" {
 
 /* Functions------------------------------------------------------------------*/
 void ButtonInit(void);
-void ButtonDeinit(void);
 bool ButtonIsPressed(void);
 
 #ifdef __cplusplus

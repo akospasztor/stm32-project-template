@@ -28,7 +28,7 @@
  */
 int main(void)
 {
-    HAL_Init();
+    (void)HAL_Init();
     SystemClockConfigure();
 
     ButtonInit();
@@ -38,7 +38,8 @@ int main(void)
 
     LogPrint("Starting application...\n");
 
-    for (uint32_t counter = 0U;; counter++)
+    uint32_t counter = 0U;
+    for (;;)
     {
         if (ButtonIsPressed())
         {
@@ -49,7 +50,7 @@ int main(void)
             LedLd3Off();
         }
 
-        if (counter % 10U == 0U)
+        if ((counter % 10U) == 0U)
         {
             LogPrint("*");
             LedLd2On();
@@ -60,5 +61,6 @@ int main(void)
         }
 
         HAL_Delay(100U);
+        counter++;
     }
 }

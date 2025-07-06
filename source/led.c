@@ -19,11 +19,25 @@
 #include "rcc.h"
 
 /* Defines -------------------------------------------------------------------*/
-#define LED_LD2_GPIO_PORT GPIOB       /**< GPIO port of the LD2 LED. */
-#define LED_LD2_GPIO_PIN  GPIO_PIN_13 /**< GPIO pin of the LD2 LED. */
+// Message:     A conversion should not be performed between a pointer to
+//              object and an integer type [misra-c2012-11.4]
+// Reason:      The following GPIO port and pin defines contain conversions that
+//              are addressing memory mapped registers and hardware specific
+//              features.
+// Risk:        Conversion of a pointer to object into an integer may produce a
+//              value that cannot be represented in the chosen integer type
+//              resulting in undefined behavior.
+// Prevention:  Code reviews.
 
-#define LED_LD3_GPIO_PORT GPIOA      /**< GPIO port of the LD3 LED. */
-#define LED_LD3_GPIO_PIN  GPIO_PIN_5 /**< GPIO pin of the LD3 LED. */
+// cppcheck-suppress-macro [misra-c2012-11.4]
+#define LED_LD2_GPIO_PORT GPIOB /**< GPIO port of the LD2 LED. */
+// cppcheck-suppress-macro [misra-c2012-11.4]
+#define LED_LD2_GPIO_PIN GPIO_PIN_13 /**< GPIO pin of the LD2 LED. */
+
+// cppcheck-suppress-macro [misra-c2012-11.4]
+#define LED_LD3_GPIO_PORT GPIOA /**< GPIO port of the LD3 LED. */
+// cppcheck-suppress-macro [misra-c2012-11.4]
+#define LED_LD3_GPIO_PIN GPIO_PIN_5 /**< GPIO pin of the LD3 LED. */
 
 /* Functions -----------------------------------------------------------------*/
 /**
@@ -36,15 +50,6 @@ void LedInitLd2(void)
     GpioSetHigh(LED_LD2_GPIO_PORT, LED_LD2_GPIO_PIN);
     GpioConfigureDigitalOut(LED_LD2_GPIO_PORT, LED_LD2_GPIO_PIN);
 }
-
-/**
- * @brief  Deinitialize the LD2 LED.
- */
-void LedDeinitLd2(void)
-{
-    GpioDeinit(LED_LD2_GPIO_PORT, LED_LD2_GPIO_PIN);
-}
-
 /**
  * @brief  Initialize the LD3 LED.
  */
@@ -54,14 +59,6 @@ void LedInitLd3(void)
 
     GpioSetLow(LED_LD3_GPIO_PORT, LED_LD3_GPIO_PIN);
     GpioConfigureDigitalOut(LED_LD3_GPIO_PORT, LED_LD3_GPIO_PIN);
-}
-
-/**
- * @brief  Deinitialize the LD3 LED.
- */
-void LedDeinitLd3(void)
-{
-    GpioDeinit(LED_LD3_GPIO_PORT, LED_LD3_GPIO_PIN);
 }
 
 /**

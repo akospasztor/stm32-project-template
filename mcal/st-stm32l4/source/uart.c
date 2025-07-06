@@ -54,5 +54,5 @@ void UartInit(UART_HandleTypeDef* const uartHandle,
  */
 void UartDeinit(UART_HandleTypeDef* const uartHandle)
 {
-    HAL_UART_DeInit(uartHandle);
+    (void)HAL_UART_DeInit(uartHandle);
 }

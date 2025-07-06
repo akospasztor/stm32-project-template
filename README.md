@@ -3,8 +3,8 @@
 This repository contains a project template for STM32-based firmware projects.
 It features a modern, CMake-based build system, documentation generation with
 Doxygen, source code formatting with clang-format, linting, enforcing style and
-naming conventions with clang-tidy, devcontainer, proven and scalable folder
-organization and more.
+naming conventions with clang-tidy, verifying MISRA C compliance with Cppcheck,
+devcontaine support, proven and scalable folder organization and more.
 
 The project template runs on a
 [STM32L496 Discovery](https://www.st.com/en/evaluation-tools/32l496gdiscovery.html)
@@ -25,6 +25,8 @@ was converted to a J-Link debugger
 - [Usage](#usage)
   - [Prerequisites](#prerequisites)
   - [Build system commands](#build-system-commands)
+  - [Manual execution of cppcheck](#manual-execution-of-cppcheck)
+  - [Inline suppression of messages](#inline-suppression-of-messages)
 - [Features](#features)
   - [Build system](#build-system)
   - [Documentation](#documentation)
@@ -41,6 +43,8 @@ was converted to a J-Link debugger
 ### Prerequisites
 
 - [CMake](https://cmake.org/download/) is installed and available on your PATH.
+- [Cppcheck](https://cppcheck.sourceforge.io/) is installed and available on
+  your PATH.
 - [Ninja](https://ninja-build.org) is installed and available on your PATH.
   Alternatively, you can use Make.
 - [GCC for ARM](https://developer.arm.com/downloads/-/gnu-rm) (GNU Arm Embedded
@@ -60,16 +64,17 @@ toolchain paths in the respective toolchain `.cmake` file.
 
 ### Build system commands
 
-| Command                                              | Description                                      |
-|:-----------------------------------------------------|:-------------------------------------------------|
-| `cmake --list-presets`                               | List all CMake presets                           |
-| `cmake --preset Debug`                               | Configure the project for Debug build            |
-| `cmake --build --preset Debug`                       | Build the firmware with Debug build type         |
-| `cmake --build --preset Debug --target clean`        | Clean the Debug target                           |
-| `cmake --build --preset Debug --target check-format` | Check source code formatting with clang-format   |
-| `cmake --build --preset Debug --target run-format`   | Run source code formatting with clang-format     |
-| `cmake --build --preset Debug --target tidy`         | Perform analysis and style check with clang-tidy |
-| `cmake --build --preset Debug --target doxygen`      | Generate documentation with Doxygen              |
+| Command                                              | Description                                               |
+|:-----------------------------------------------------|:----------------------------------------------------------|
+| `cmake --list-presets`                               | List all CMake presets                                    |
+| `cmake --preset Debug`                               | Configure the project for Debug build                     |
+| `cmake --build --preset Debug`                       | Build the firmware with Debug build type                  |
+| `cmake --build --preset Debug --target clean`        | Clean the Debug target                                    |
+| `cmake --build --preset Debug --target check-format` | Check source code formatting with clang-format            |
+| `cmake --build --preset Debug --target run-format`   | Run source code formatting with clang-format              |
+| `cmake --build --preset Debug --target cppcheck`     | Perform analysis and MISRA conformity check with cppcheck |
+| `cmake --build --preset Debug --target tidy`         | Perform analysis and style check with clang-tidy          |
+| `cmake --build --preset Debug --target doxygen`      | Generate documentation with Doxygen                       |
 
 Supported CMake configurations and build presets:
 
@@ -79,6 +84,51 @@ Supported CMake configurations and build presets:
 | `Release`        | Release preset with `O3` optimization                                               |
 | `MinSizeRel`     | Release preset with `Os` optimization for size with link time optimization enabled  |
 | `RelWithDebInfo` | Release preset with `O2` optimization with debug information                        |
+
+### Manual execution of cppcheck
+
+Make sure that the build and output directories exist because Cppcheck does not
+create them automatically:
+
+```shell
+mkdir -p build/Debug/cppcheck/report
+```
+
+Run Cppcheck:
+
+```shell
+cppcheck \
+--project=build/Debug/compile_commands.json \
+--cppcheck-build-dir=build/Debug/cppcheck \
+--checkers-report=build/Debug/cppcheck/report/checkers.txt \
+--addon=lint/misra.json \
+--check-level=exhaustive \
+--enable=all \
+--error-exitcode=1 \
+--inconclusive \
+--inline-suppr \
+--max-ctu-depth=10 \
+--safety \
+--std=c11 \
+--suppressions-list=lint/suppressions.txt \
+-D__GNUC__ \
+-j$(nproc)
+```
+
+### Inline suppression of messages
+
+When a suppression for a message needs to be added, it must be added with the
+following format. All suppressions must have a justification.
+
+```c
+// Message:     The actual message from the static code analysis tool
+// Reason:      The reason why this message pops up and why this message needs
+//              to be suppressed.
+// Risk:        The risk and possible unwanted side-effects by supressing the
+//              message.
+// Prevention:  How can be the risk prevented/mitigated.
+// cppcheck-suppress [...]
+```
 
 ## Features
 
@@ -114,6 +164,10 @@ formatting guidelines.
 Clang-tidy is used for basic linting of the source code. In addition, this tool
 also checks and enforces naming conventions and style violations.
 
+Cppcheck is used for static code analysis, including verifying compliance with
+MISRA C. The official MISRA headlines for Cppcheck can be obtained at:
+[https://gitlab.com/MISRA/MISRA-C/MISRA-C-2012/tools/-/tree/main](https://gitlab.com/MISRA/MISRA-C/MISRA-C-2012/tools/-/tree/main)
+
 ### Style check
 
 The `requirements.txt` file contains packages that are used for style checking.
@@ -140,6 +194,7 @@ automatically on every git push and has the following stages:
    - Build the firmware with all build configurations
    - Build the documentation with Doxygen
    - Run clang-tidy
+   - Run cppcheck
 3. Deploy stage:
    - Collect artifacts
    - Deploy Doxygen output to GitHub pages (runs only on master branch, e.g.
