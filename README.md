@@ -4,7 +4,7 @@ This repository contains a project template for STM32-based firmware projects.
 It features a modern, CMake-based build system, documentation generation with
 Doxygen, source code formatting with clang-format, linting, enforcing style and
 naming conventions with clang-tidy, verifying MISRA C compliance with Cppcheck,
-devcontaine support, proven and scalable folder organization and more.
+devcontainer support, proven and scalable folder organization and more.
 
 The project template runs on a
 [STM32L496 Discovery](https://www.st.com/en/evaluation-tools/32l496gdiscovery.html)
@@ -124,7 +124,7 @@ following format. All suppressions must have a justification.
 // Message:     The actual message from the static code analysis tool
 // Reason:      The reason why this message pops up and why this message needs
 //              to be suppressed.
-// Risk:        The risk and possible unwanted side-effects by supressing the
+// Risk:        The risk and possible unwanted side-effects by suppressing the
 //              message.
 // Prevention:  How can be the risk prevented/mitigated.
 // cppcheck-suppress [...]
