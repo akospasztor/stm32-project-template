@@ -21,6 +21,11 @@
 #include "stm32l4xx_hal.h"
 #include "system_clock.h"
 
+/* Private defines -----------------------------------------------------------*/
+#define FIRMWARE_VERSION_MAJOR 1U /**< Major version */
+#define FIRMWARE_VERSION_MINOR 0U /**< Minor version */
+#define FIRMWARE_VERSION_PATCH 0U /**< Patch version */
+
 /**
  * @brief  The main function.
  *
@@ -37,6 +42,8 @@ int main(void)
     LogInit();
 
     LogPrint("Starting application...\n");
+    LogPrint("Firmware version: %u.%u.%u\n", FIRMWARE_VERSION_MAJOR,
+             FIRMWARE_VERSION_MINOR, FIRMWARE_VERSION_PATCH);
 
     uint32_t counter = 0U;
     for (;;)
