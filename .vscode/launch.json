@@ -28,7 +28,7 @@
             "executable": "${workspaceFolder}/build/Debug/stm32-project-template.elf",
             "interface": "swd",
             "runToEntryPoint": "main",
-            "serverpath": "/Applications/SEGGER/JLink_V794d/JLinkGDBServerCLExe",
+            "serverpath": "/Applications/SEGGER/JLink/JLinkGDBServerCLExe",
             "servertype": "jlink",
             "svdFile": "${workspaceFolder}/mcal/st-stm32l4/svd/STM32L496.svd",
         },
