@@ -23,11 +23,6 @@
 #include "stm32l4xx_hal.h"
 #include "system_clock.h"
 
-/* Private defines -----------------------------------------------------------*/
-#define FIRMWARE_VERSION_MAJOR 1U /**< Major version */
-#define FIRMWARE_VERSION_MINOR 0U /**< Minor version */
-#define FIRMWARE_VERSION_PATCH 0U /**< Patch version */
-
 /**
  * @brief  The main function.
  *

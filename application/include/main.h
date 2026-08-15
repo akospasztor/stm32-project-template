@@ -21,7 +21,7 @@ extern "C" {
 #endif
 
 /* Defines -------------------------------------------------------------------*/
-#define FIRMWARE_VERSION_MAJOR 1U /*!< Major version */
+#define FIRMWARE_VERSION_MAJOR 2U /*!< Major version */
 #define FIRMWARE_VERSION_MINOR 0U /*!< Minor version */
 #define FIRMWARE_VERSION_PATCH 0U /*!< Patch version */
 
