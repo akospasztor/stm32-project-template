@@ -1,7 +1,16 @@
-# Set linker script
-set(LINKER_SCRIPT
-    ${PROJECT_SOURCE_DIR}/mcal/st-stm32l4/gcc-arm/stm32l496xx_flash.ld
-)
+################################################################################
+# STM32 Project Template
+################################################################################
+# @author    Akos Pasztor
+# @brief     This file contains the microcontroller-specific build and linker
+#            flags for CMake.
+################################################################################
+# @copyright (c) 2026 Akos Pasztor.                     https://akospasztor.com
+#            This software is licensed under terms that can be found in the
+#            LICENSE file in the root directory of this software component.
+################################################################################
+
+# Check linker script
 if(NOT EXISTS ${LINKER_SCRIPT})
     message(FATAL_ERROR "Linker script \"${LINKER_SCRIPT}\" does not exist!")
 endif()

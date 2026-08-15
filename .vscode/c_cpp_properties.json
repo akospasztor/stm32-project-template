@@ -6,7 +6,7 @@
             "${workspaceFolder}/lib/STM32L4xx_HAL_Driver/Inc",
             "${workspaceFolder}/lib/STM32L4xx_HAL_Driver/Inc/Legacy",
             "${workspaceFolder}/mcal/st-stm32l4/include",
-            "${workspaceFolder}/include",
+            "${workspaceFolder}/application/include",
             "${workspaceFolder}/**"
         ],
         "commonDefines": [

@@ -1,3 +1,14 @@
+################################################################################
+# STM32 Project Template
+################################################################################
+# @author    Akos Pasztor
+# @brief     This file contains the common build flags for CMake.
+################################################################################
+# @copyright (c) 2026 Akos Pasztor.                     https://akospasztor.com
+#            This software is licensed under terms that can be found in the
+#            LICENSE file in the root directory of this software component.
+################################################################################
+
 # Set debug flags (Debug build type)
 set(DEBUG_FLAGS
     "-Og"

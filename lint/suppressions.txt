@@ -26,8 +26,8 @@ misra-c2012-8.7:*mcal/*
 //              reviewer if the macro is redundant or it has been left unused by
 //              mistake.
 // Prevention:  Code reviews.
-misra-c2012-2.5:*include/stm32l4xx_hal_conf.h
-misra-c2012-2.5:*source/system_stm32l4xx.c
+misra-c2012-2.5:*application/include/stm32l4xx_hal_conf.h
+misra-c2012-2.5:*application/source/system_stm32l4xx.c
 
 // Message:     The function 'X' is never used [unusedFunction]
 // MISRA:       A compatible declaration shall be visible when an object
@@ -36,8 +36,8 @@ misra-c2012-2.5:*source/system_stm32l4xx.c
 //              the startup file.
 // Risk:        None.
 // Prevention:  None.
-unusedFunction:*source/stm32l4xx_it.c
-misra-c2012-8.4:*source/stm32l4xx_it.c
+unusedFunction:*application/source/stm32l4xx_it.c
+misra-c2012-8.4:*application/source/stm32l4xx_it.c
 
 // Message:     Functions and objects should not be defined with external
 //              linkage if they are referenced in only one translation unit
@@ -46,7 +46,7 @@ misra-c2012-8.4:*source/stm32l4xx_it.c
 //              microcontroller vendor library.
 // Risk:        None.
 // Prevention:  None.
-misra-c2012-8.7:*source/system_stm32l4xx.c
+misra-c2012-8.7:*application/source/system_stm32l4xx.c
 
 // Message:     A conversion should not be performed between a pointer to object
 //              and an integer type [misra-c2012-11.4]
@@ -62,7 +62,7 @@ misra-c2012-8.7:*source/system_stm32l4xx.c
 //              resulting in undefined behavior.
 // Prevention:  Code reviews.
 misra-c2012-11.4:*mcal/st-stm32l4/source/rcc.c
-misra-c2012-11.4:*source/system_stm32l4xx.c
+misra-c2012-11.4:*application/source/system_stm32l4xx.c
 
 // Message:     The Standard Library input/output functions shall not be
 //              used [misra-c2012-21.6]
@@ -73,4 +73,4 @@ misra-c2012-11.4:*source/system_stm32l4xx.c
 // Risk:        Streams and file I/O have unspecified, undefined and
 //              implementation-defined behaviors associated with them.
 // Prevention:  Code reviews and testing.
-misra-c2012-21.6:*source/*
+misra-c2012-21.6:*application/source/*

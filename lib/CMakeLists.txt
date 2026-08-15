@@ -3,50 +3,55 @@ cmake_minimum_required(VERSION 3.22)
 project(lib)
 enable_language(C CXX ASM)
 
-# Set include paths
-SET(INCLUDES_LIB_CMSIS
-    CMSIS/Device/ST/STM32L4xx/Include
+# Set common library include paths
+set(LIB_INCLUDES
     CMSIS/Include
 )
 
-SET(INCLUDES_LIB_STM32L4XX_HAL_DRIVER
-    STM32L4xx_HAL_Driver/Inc
-    STM32L4xx_HAL_Driver/Inc/Legacy
-)
-
-# Set source files
-SET(SOURCES_LIB_STM32L4XX_HAL_Driver
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_exti.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
-    STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
-)
+# Set target-specific library include paths and source files
+if(MCU MATCHES "^STM32L4")
+    set(LIB_INCLUDES
+        ${LIB_INCLUDES}
+        CMSIS/Device/ST/STM32L4xx/Include
+        STM32L4xx_HAL_Driver/Inc
+        STM32L4xx_HAL_Driver/Inc/Legacy
+    )
+    set(LIB_SOURCES
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_exti.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
+        STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
+    )
+else()
+    message(FATAL_ERROR "Unsupported MCU: ${MCU}")
+endif()
 
 add_library(lib INTERFACE)
 
 target_include_directories(lib INTERFACE
-    ${INCLUDES_LIB_CMSIS}
-    ${INCLUDES_LIB_STM32L4XX_HAL_DRIVER}
+    ${LIB_INCLUDES}
 )
 
 target_sources(lib INTERFACE
-    ${SOURCES_LIB_STM32L4XX_HAL_Driver}
+    ${LIB_SOURCES}
+)
+
+target_link_libraries(lib INTERFACE
 )
 
 # Export include paths for clang-tidy as system includes
 set(LIB_CLANG_TIDY_SYSTEM_INCLUDES
-    ${INCLUDES_LIB_CMSIS}
-    ${INCLUDES_LIB_STM32L4XX_HAL_DRIVER}
+    ${LIB_INCLUDES}
 )
 
 # Prepend the include list with the path of the current directory
