@@ -30,18 +30,22 @@
 #define HSI_VALUE 16000000U
 #endif /* HSI_VALUE */
 
-// Note: the following vector table addresses must be defined in line with
-// linker configuration.
-
-// Uncomment the following line if you need to relocate the vector table
-// anywhere in Flash or Sram, else the vector table is kept at the automatic
-// remap of boot address selected.
-/* #define USER_VECT_TAB_ADDRESS */
+/**
+ * @brief Define to enable user-defined vector table address setting
+ *
+ * Uncomment the following line if you need to relocate the vector table
+ * anywhere in Flash or SRAM, else the vector table is kept at the automatic
+ * remap of the boot address selected.
+ *
+ * @note  The vector table addresses must be defined in line with the linker
+          configuration.
+ */
+// #define USER_VECT_TAB_ADDRESS
 
 #if defined(USER_VECT_TAB_ADDRESS)
 // Uncomment the following line if you need to relocate your vector Table in
 // SRAM else user remap will be done in Flash.
-/* #define VECT_TAB_SRAM */
+// #define VECT_TAB_SRAM
 
 #if defined(VECT_TAB_SRAM)
 /** Vector Table base address field. This value must be a multiple of 0x200. */
