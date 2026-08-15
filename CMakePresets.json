@@ -8,6 +8,7 @@
             "binaryDir": "${sourceDir}/build/${presetName}",
 		    "toolchainFile": "${sourceDir}/cmake/toolchains/gcc-arm-none-eabi.cmake",
             "cacheVariables": {
+                "MCU": "STM32L496"
             }
         },
         {

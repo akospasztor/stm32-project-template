@@ -1,3 +1,15 @@
+################################################################################
+# STM32 Project Template
+################################################################################
+# @author    Akos Pasztor
+# @brief     This file contains the clang-tools toolchain configuration for
+#            CMake.
+################################################################################
+# @copyright (c) 2026 Akos Pasztor.                     https://akospasztor.com
+#            This software is licensed under terms that can be found in the
+#            LICENSE file in the root directory of this software component.
+################################################################################
+
 # Specify the clang tools binary folder if it does not exist in PATH
 # Note: the path must be specified without trailing slash
 set(CLANG_TOOLS_BIN_PATH

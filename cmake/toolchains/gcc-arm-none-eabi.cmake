@@ -1,3 +1,15 @@
+################################################################################
+# STM32 Project Template
+################################################################################
+# @author    Akos Pasztor
+# @brief     This file contains the GCC for ARM cross-compiler toolchain
+#             configuration for CMake.
+################################################################################
+# @copyright (c) 2026 Akos Pasztor.                     https://akospasztor.com
+#            This software is licensed under terms that can be found in the
+#            LICENSE file in the root directory of this software component.
+################################################################################
+
 set(CMAKE_SYSTEM_NAME               Generic)
 set(CMAKE_SYSTEM_VERSION            1)
 set(CMAKE_SYSTEM_PROCESSOR          arm)

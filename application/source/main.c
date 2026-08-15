@@ -13,6 +13,8 @@
  */
 
 /* Includes ------------------------------------------------------------------*/
+#include "main.h"
+
 #include "button.h"
 #include "error_handler.h"
 #include "led.h"
@@ -41,6 +43,9 @@ int main(void)
     LedInitLd3();
     LogInit();
 
+    LogPrint("\n\n----------------------------------\n");
+    LogPrint("STM32 Project Template Application\n");
+    LogPrint("----------------------------------\n");
     LogPrint("Starting application...\n");
     LogPrint("Firmware version: %u.%u.%u\n", FIRMWARE_VERSION_MAJOR,
              FIRMWARE_VERSION_MINOR, FIRMWARE_VERSION_PATCH);

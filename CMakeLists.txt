@@ -1,3 +1,17 @@
+################################################################################
+# STM32 Project Template
+################################################################################
+# @author    Akos Pasztor
+# @brief     This file is the central configuration script used by CMake to
+#            define how this firmware project is built. It also contains custom
+#            target definitions to execute checks, static code analysis, to
+#            build the documentation and more.
+################################################################################
+# @copyright (c) 2026 Akos Pasztor.                     https://akospasztor.com
+#            This software is licensed under terms that can be found in the
+#            LICENSE file in the root directory of this software component.
+################################################################################
+
 cmake_minimum_required(VERSION 3.22)
 
 project(stm32-project-template)
@@ -29,68 +43,58 @@ ProcessorCount(NPROC)
 include(cmake/tools/clang-tools.cmake)
 include(cmake/tools/python.cmake)
 
-# Include the microcontroller-specific parameters
+# Include the common parameters
 include(cmake/microcontrollers/common.cmake)
-include(cmake/microcontrollers/stm32l4-gcc.cmake)
 
-# Add library files
-add_subdirectory(lib)
+# Include the microcontroller-specific parameters
+if(MCU STREQUAL "STM32L496")
+    # Set linker script
+    set(LINKER_SCRIPT
+        ${PROJECT_SOURCE_DIR}/mcal/st-stm32l4/gcc-arm/stm32l496xx_flash.ld
+    )
+    include(cmake/microcontrollers/stm32l4-gcc.cmake)
+else()
+    message(FATAL_ERROR "Unsupported MCU: ${MCU}")
+endif()
 
-# Set defines
+# Set common defines
 set(DEFINES
-    STM32L496xx
     USE_HAL_DRIVER
     USE_FULL_ASSERT
     $<IF:$<CONFIG:Debug>,DEBUG,NDEBUG>
 )
 
-# Set include paths
-set(INCLUDES
-    ${PROJECT_SOURCE_DIR}/mcal/st-stm32l4/include
-    ${PROJECT_SOURCE_DIR}/include
-)
+# Set target-specific defines
+if(MCU STREQUAL "STM32L496")
+    set(DEFINES
+        ${DEFINES}
+        STM32L496xx
+    )
+else()
+    message(FATAL_ERROR "Unsupported MCU: ${MCU}")
+endif()
 
-# Set source files
-set(SOURCES_ASM
-    ${PROJECT_SOURCE_DIR}/mcal/st-stm32l4/gcc-arm/startup_stm32l496xx.s
-)
-set(SOURCES_C
-    ${PROJECT_SOURCE_DIR}/mcal/st-stm32l4/source/gpio.c
-    ${PROJECT_SOURCE_DIR}/mcal/st-stm32l4/source/rcc.c
-    ${PROJECT_SOURCE_DIR}/mcal/st-stm32l4/source/systick.c
-    ${PROJECT_SOURCE_DIR}/mcal/st-stm32l4/source/uart.c
-    ${PROJECT_SOURCE_DIR}/source/button.c
-    ${PROJECT_SOURCE_DIR}/source/error_handler.c
-    ${PROJECT_SOURCE_DIR}/source/led.c
-    ${PROJECT_SOURCE_DIR}/source/log.c
-    ${PROJECT_SOURCE_DIR}/source/main.c
-    ${PROJECT_SOURCE_DIR}/source/stm32l4xx_it.c
-    ${PROJECT_SOURCE_DIR}/source/system_clock.c
-    ${PROJECT_SOURCE_DIR}/source/system_stm32l4xx.c
-)
+# Initialize common includes and source files lists for the clang-tools
+set(INCLUDES    "")
+set(SOURCES_C   "")
+
+# Add firmware components
+add_subdirectory(application)
+add_subdirectory(lib)
+add_subdirectory(mcal)
 
 # Specify target executable
 add_executable(${CMAKE_PROJECT_NAME})
 
-# Specify target compile definitions
+# Specify compile definitions
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
     ${DEFINES}
 )
 
-# Specify target include directories
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    ${INCLUDES}
-)
-
-# Specify target source files
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    ${SOURCES_ASM}
-    ${SOURCES_C}
-)
-
-# Specify libraries to link
+# Specify firmware components to use when linking the target
+# Note: the requirements from linked components are propagated.
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
-    lib
+    application
 )
 
 # Generate size information
@@ -101,13 +105,13 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
 # Generate binary output
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.bin
-    COMMAND ${CMAKE_COMMAND} -E echo "Create bin output: ${TARGET_BIN_OUTPUT}"
+    COMMAND ${CMAKE_COMMAND} -E echo "Create bin output: ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.bin"
 )
 
 # Generate hex output
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.hex
-    COMMAND ${CMAKE_COMMAND} -E echo "Create hex output: ${TARGET_HEX_OUTPUT}"
+    COMMAND ${CMAKE_COMMAND} -E echo "Create hex output: ${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex"
 )
 
 # Add custom target to check source code formatting with clang-format
