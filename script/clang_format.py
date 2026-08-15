@@ -1,5 +1,17 @@
 #!/usr/bin/env python
 
+"""Check and apply C/C++ formatting using clang-format.
+
+This script can either verify that source files conform to a given coding style
+or reformat them in-place. It requires the ``clang-format`` tool and parses its
+XML replacement output to report per-file formatting errors.
+
+:author:    Akos Pasztor
+:copyright: (c) 2026 Akos Pasztor, https://akospasztor.com
+:license:   This software is licensed under terms that can be found in the
+            LICENSE file in the root directory of this software component.
+"""
+
 import argparse
 import glob
 import os
@@ -8,6 +20,18 @@ import xml.etree.ElementTree as ET
 
 
 def replacements_from_file(file, style="file", executable="clang-format"):
+    """Run clang-format on a file and return the list of replacements.
+
+    :param file: Path to the source file.
+    :type file:  str
+    :param style: Coding style passed to clang-format's ``-style`` option.
+    :type style:  str
+    :param executable: Path to the clang-format executable.
+    :type executable:  str
+    :return: A list of dicts, each containing ``offset``, ``length``, and
+             ``text`` keys describing a single replacement.
+    :rtype:  list[dict]
+    """
     replacements = []
 
     clang_format_args = [executable]
@@ -27,7 +51,18 @@ def replacements_from_file(file, style="file", executable="clang-format"):
     return replacements
 
 
-def errors_from_replacements(file, replacements=[]):
+def errors_from_replacements(file, replacements):
+    """Convert raw replacements into human-readable error descriptions.
+
+    :param file: Path to the source file (used to read line offsets).
+    :type file:  str
+    :param replacements: List of replacement dicts as returned by
+                         :func:`replacements_from_file`.
+    :type replacements:  list[dict]
+    :return: A list of dicts, each containing ``line``, ``column``, ``found``,
+             and ``expected`` keys and values describing the formatting errors.
+    :rtype:  list[dict]
+    """
     errors = []
 
     lines = [0]  # line index to character offset
@@ -55,22 +90,36 @@ def errors_from_replacements(file, replacements=[]):
     return errors
 
 
-def check_format(files=[], style="file", executable="clang-format"):
+def check_format(files, style="file", executable="clang-format"):
+    """Check formatting of the given files and report errors.
+
+    :param files: Iterable of file paths to check.
+    :type files:  list[str]
+    :param style: Coding style passed to clang-format's ``-style`` option.
+    :type style:  str
+    :param executable: Path to the clang-format executable.
+    :type executable:  str
+    :return: A tuple of ``(total_error_count, file_errors)`` where
+             ``file_errors`` is a dict mapping file paths to their list of
+             error dicts.
+    :rtype:  tuple[int, dict]
+    """
     executable = os.path.normpath(executable)
     total_error_count = 0
-    file_errors = dict()
+    file_errors = {}
     print("Collected {} file(s) to check.".format(len(files)))
 
     for f in files:
+        print("- Checking {} ... ".format(f), end="")
         replacements = replacements_from_file(f, style, executable)
         errors = errors_from_replacements(f, replacements)
         if len(errors) > 0:
-            print("- Checking {} ... {} format error{}"
-                  .format(f, len(errors), 's' if len(errors) > 1 else ''))
+            print("{} format error{}".format(
+                len(errors), 's' if len(errors) > 1 else ''))
             file_errors[f] = errors
             total_error_count += len(errors)
         else:
-            print("- Checking {} ... OK".format(f))
+            print("OK")
 
     if total_error_count == 0:
         print("No format errors found.")
@@ -84,7 +133,16 @@ def check_format(files=[], style="file", executable="clang-format"):
     return total_error_count, file_errors
 
 
-def run_format(files=[], style="file", executable="clang-format"):
+def run_format(files, style="file", executable="clang-format"):
+    """Format the given files in-place using clang-format.
+
+    :param files: Iterable of file paths to format.
+    :type files:  list[str]
+    :param style: Coding style passed to clang-format's ``-style`` option.
+    :type style:  str
+    :param executable: Path to the clang-format executable.
+    :type executable:  str
+    """
     executable = os.path.normpath(executable)
     print("Collected {} file(s) to format.".format(len(files)))
 
@@ -101,9 +159,16 @@ def run_format(files=[], style="file", executable="clang-format"):
 
 
 def check_clang_format_exe(executable="clang-format"):
+    """Verify that the clang-format executable is available.
+
+    :param executable: Path to the clang-format executable.
+    :type executable:  str
+    :return: True if the executable can be invoked; otherwise False.
+    :rtype:  bool
+    """
     executable = os.path.normpath(executable)
     try:
-        subprocess.check_output([executable, "--version"], shell=True)
+        subprocess.check_output([executable, "--version"])
         return True
     except subprocess.CalledProcessError:
         # Some versions of clang-format --version lead to non-zero exit status
@@ -112,7 +177,41 @@ def check_clang_format_exe(executable="clang-format"):
         return False
 
 
-def main():
+def clang_format(files, check, style="file", executable="clang-format"):
+    """Entry point: check or format the collected files.
+
+    :param files: Iterable of file paths to process.
+    :type files:  list[str]
+    :param check: If True, only check formatting; otherwise format in-place.
+    :type check:  bool
+    :param style: Coding style passed to clang-format's ``-style`` option.
+    :type style:  str
+    :param executable: Path to the clang-format executable.
+    :type executable:  str
+    """
+    # Add double quotes around inline style
+    if len(style) > 0 and style[0] == "{":
+        style = "\"" + style + "\""
+
+    # Make sure that clang-format executable is available
+    if not check_clang_format_exe(executable):
+        print("Cannot run 'clang-format'. Please make sure the provided "
+              "executable is valid or `clang-format` can be reached in PATH.")
+        exit(-1)
+
+    error_count = 0
+    if check:
+        error_count, _ = check_format(files=files,
+                                      style=style,
+                                      executable=executable)
+    else:
+        run_format(files=files,
+                   style=style,
+                   executable=executable)
+    exit(error_count)
+
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Check C/C++ formatting using clang-format")
 
@@ -135,16 +234,6 @@ def main():
 
     args = parser.parse_args()
 
-    # Add double quotes around inline style
-    if len(args.style) > 0 and args.style[0] == "{":
-        args.style = "\"" + args.style + "\""
-
-    # Make sure that clang-format executable is available
-    if not check_clang_format_exe(args.executable):
-        print("Cannot run 'clang-format'. Please make sure the provided "
-              "executable is valid or `clang-format` can be reached in PATH.")
-        exit(-1)
-
     # Collect files
     collected_files = set()
     for path in args.file:
@@ -157,17 +246,4 @@ def main():
     collected_files = list(collected_files)
     collected_files.sort()
 
-    error_count = 0
-    if args.check:
-        error_count, file_errors = check_format(files=collected_files,
-                                                style=args.style,
-                                                executable=args.executable)
-    else:
-        run_format(files=collected_files,
-                   style=args.style,
-                   executable=args.executable)
-    exit(error_count)
-
-
-if __name__ == "__main__":
-    main()
+    clang_format(collected_files, args.check, args.style, args.executable)
