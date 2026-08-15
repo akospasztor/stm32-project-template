@@ -139,3 +139,24 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+  publish_release:
+    if: ${{ startsWith(github.ref, 'refs/tags/') && contains(github.ref, '.') }}
+    needs:
+      - collect_artifacts
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download firmware artifacts
+        uses: actions/download-artifact@v8
+      - name: Zip all downloaded artifacts
+        run: zip -r stm32-project-template-${{ github.ref_name }}.zip .
+      - name: Create release
+        uses: softprops/action-gh-release@v3
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            *.zip
