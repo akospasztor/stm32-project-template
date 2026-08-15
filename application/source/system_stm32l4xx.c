@@ -40,7 +40,7 @@
  * @note  The vector table addresses must be defined in line with the linker
           configuration.
  */
-// #define USER_VECT_TAB_ADDRESS
+#define USER_VECT_TAB_ADDRESS
 
 #if defined(USER_VECT_TAB_ADDRESS)
 // Uncomment the following line if you need to relocate your vector Table in
@@ -56,7 +56,7 @@
 /** Vector Table base address field. This value must be a multiple of 0x200. */
 #define VECT_TAB_BASE_ADDRESS FLASH_BASE
 /** Vector Table base offset field. This value must be a multiple of 0x200. */
-#define VECT_TAB_OFFSET       0x00000000U
+#define VECT_TAB_OFFSET       0x00010000U
 #endif /* VECT_TAB_SRAM */
 #endif /* USER_VECT_TAB_ADDRESS */
 

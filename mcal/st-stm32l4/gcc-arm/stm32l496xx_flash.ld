@@ -12,7 +12,7 @@ _Min_Heap_Size  = 0x400;    /* required amount of heap  */
 MEMORY
 {
 RAM (xrw)  : ORIGIN = 0x20000000, LENGTH = 0x50000
-FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 0x100000
+FLASH (rx) : ORIGIN = 0x08010000, LENGTH = 0xF0000
 }
 
 /* Define output sections */
