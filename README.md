@@ -230,6 +230,9 @@ stm32-project-template
 ├── .github
 │   └── workflows
 ├── .vscode
+├── application
+│   ├── include
+│   └── source
 ├── build
 ├── cmake
 │   ├── microcontrollers
@@ -237,10 +240,10 @@ stm32-project-template
 │   └── tools
 ├── docs
 │   └── doxygen
-├── include
 ├── lib
 │   ├── CMSIS
 │   └── STM32L4xx_HAL_Driver
+├── lint
 ├── mcal
 │   └── st-stm32l4
 │       ├── gcc-arm
@@ -249,8 +252,7 @@ stm32-project-template
 │       └── svd
 ├── project
 │   └── ozone
-├── script
-└── source
+└── script
 ```
 
 The `.devcontainer` folder contains the devcontainer file which enables
@@ -258,6 +260,9 @@ development inside a container.
 
 The `.github` folder contains the GitHub Actions workflow file which describes
 the CI pipeline that runs automatically on every git push operation.
+
+The application-level source code and corresponding header files are located in
+the `application` folder; organized into `source` and `include` subfolders.
 
 Upon building the project, a `build` folder is created. All build-related files
 and output binaries are located in the `build` folder, organized into
@@ -271,12 +276,11 @@ including the toolchain and microcontroller-specific files.
 The `docs` folder contains the doxygen configuration file (Doxyfile) and other
 documentation-related static files.
 
-The application-level source code and corresponding header files are located in
-the `source` and `include` folders respectively.
-
 The `lib` folder contains all third-party code, including the CMSIS (Cortex
 Microcontroller Software Interface Standard) as well as the HAL (Hardware
 Abstraction Layer) drivers from ST.
+
+The `lint` folder contains the helper files for the static code analysis tools.
 
 The `mcal` folder stands for Microcontroller Abstraction Library. This folder
 contains the microcontroller-specific files and drivers. These drivers are
