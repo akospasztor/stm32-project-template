@@ -11,7 +11,7 @@ jobs:
     container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.3.0
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Check source code formatting
         run: >
           cmake --preset Debug
@@ -21,7 +21,7 @@ jobs:
     container: docker.io/akospasztor/docker-gcc-arm:10-2020-q4-linux-2.3.0
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install requirements
         run: pip install -r requirements.txt
       - name: Run editorconfig-checker
@@ -38,13 +38,13 @@ jobs:
       - check_style
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Build doxygen documentation
         run: >
           cmake --preset Debug
           && cmake --build --preset Debug --target doxygen
       - name: Upload doxygen html artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: doxygen-html
           path: build/doxygen/html
@@ -59,13 +59,13 @@ jobs:
         cmake_preset: ["Debug", "Release", "MinSizeRel", "RelWithDebInfo"]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Configure cmake preset
         run: cmake --preset ${{ matrix.cmake_preset }}
       - name: Build cmake preset
         run: cmake --build --preset ${{ matrix.cmake_preset }}
       - name: Upload firmware images artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: firmware-${{ matrix.cmake_preset }}
           path: |
@@ -81,7 +81,7 @@ jobs:
       - check_style
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Run clang-tidy
         run: >
           cmake --preset Debug
@@ -97,7 +97,7 @@ jobs:
         cmake_preset: ["Debug", "Release", "MinSizeRel", "RelWithDebInfo"]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Configure cmake preset
         run: cmake --preset ${{ matrix.cmake_preset }}
       - name: Run cppcheck
@@ -111,14 +111,14 @@ jobs:
       - run_cppcheck
     steps:
       - name: Download doxygen html artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: doxygen-html
           path: doxygen/html
       - name: Display structure of downloaded files
         run: ls -al doxygen/html
       - name: Upload github-pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: doxygen/html
   deploy_pages:
@@ -137,4 +137,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
